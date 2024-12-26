@@ -77,10 +77,29 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Odpowiedź z API:', data);  // Logowanie odpowiedzi
-                if (data && data.type === 'FeatureCollection' && data.features) {
-                    L.geoJSON(data).addTo(map); // Dodanie izochrony na mapę
+
+                // Sprawdzamy, czy odpowiedź zawiera dane w formacie, który możemy zamienić na GeoJSON
+                if (data && data.polygons && data.polygons.length > 0) {
+                    // Załóżmy, że pierwsze pole w tablicy `polygons` zawiera współrzędne
+                    var polygonCoordinates = data.polygons[0];  // Przykład z pierwszego poligonu
+
+                    // Konwersja danych na GeoJSON
+                    var geoJson = {
+                        type: "FeatureCollection",
+                        features: [{
+                            type: "Feature",
+                            geometry: {
+                                type: "Polygon",
+                                coordinates: [polygonCoordinates]  // Współrzędne muszą być tablicą tablic współrzędnych
+                            },
+                            properties: {}
+                        }]
+                    };
+
+                    // Dodanie GeoJSON do mapy
+                    L.geoJSON(geoJson).addTo(map);
                 } else {
-                    console.error('Błąd: Otrzymano niepoprawne dane GeoJSON.');
+                    console.error('Błąd: Otrzymano niepoprawne dane, brak pól z poligonami.');
                 }
             })
             .catch(error => {
