@@ -28,9 +28,9 @@
 
 <div id="map"></div>
 
-<button onclick="generateIsochron('car')">Samochód</button>
-<button onclick="generateIsochron('foot')">Pieszo</button>
-<button onclick="generateIsochron('bike')">Rower</button>
+<button id="carBtn">Samochód</button>
+<button id="footBtn">Pieszo</button>
+<button id="bikeBtn">Rower</button>
 
 <script>
     // Inicjalizacja mapy
@@ -55,39 +55,52 @@
 
     // Funkcja generująca izochrony (poligony)
     function generateIsochron(mode) {
-    if (!marker) {
-        alert("Wybierz punkt na mapie.");
-        return;
+        if (!marker) {
+            alert("Wybierz punkt na mapie.");
+            return;
+        }
+
+        var lat = marker.getLatLng().lat;
+        var lon = marker.getLatLng().lng;
+
+        // Twój klucz API z GraphHopper
+        var apiKey = '7e539117-ecab-4f5c-b7ab-ed83f1fd4825'; 
+
+        // Konstrukcja URL do GraphHopper
+        var url = `https://graphhopper.com/api/1/isochrone?point=${lat},${lon}&time_limit=600&vehicle=${mode}&key=${apiKey}`;
+
+        // Logowanie zapytania
+        console.log("Zapytanie do API:", url);
+
+        // Wysłanie zapytania do API
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Odpowiedź z API:', data);  // Logowanie odpowiedzi
+                if (data && data.type === 'FeatureCollection' && data.features) {
+                    L.geoJSON(data).addTo(map); // Dodanie izochrony na mapę
+                } else {
+                    console.error('Błąd: Otrzymano niepoprawne dane GeoJSON.');
+                }
+            })
+            .catch(error => {
+                console.error('Błąd podczas generowania izochrony:', error);
+            });
     }
 
-    var lat = marker.getLatLng().lat;
-    var lon = marker.getLatLng().lng;
+    // Dodanie event listenerów dla przycisków
+    document.getElementById('carBtn').addEventListener('click', function() {
+        generateIsochron('car'); // Samochód
+    });
 
-    // Twój klucz API z GraphHopper
-    var apiKey = '7e539117-ecab-4f5c-b7ab-ed83f1fd4825'; 
+    document.getElementById('footBtn').addEventListener('click', function() {
+        generateIsochron('foot'); // Pieszo
+    });
 
-    // Konstrukcja URL do GraphHopper
-    var url = `https://graphhopper.com/api/1/isochrone?point=${lat},${lon}&time_limit=600&vehicle=${mode}&key=${apiKey}`;
-
-    // Logowanie zapytania
-    console.log("Zapytanie do API:", url);
-
-    // Wysłanie zapytania do API
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.type === 'FeatureCollection' && data.features) {
-                L.geoJSON(data).addTo(map); // Dodanie izochrony na mapę
-            } else {
-                console.error('Błąd: Otrzymano niepoprawne dane GeoJSON.');
-            }
-        })
-        .catch(error => {
-            console.error('Błąd podczas generowania izochrony:', error);
-        });
-}
+    document.getElementById('bikeBtn').addEventListener('click', function() {
+        generateIsochron('bike'); // Rower
+    });
 </script>
 
 </body>
 </html>
-
