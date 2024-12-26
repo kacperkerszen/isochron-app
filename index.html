@@ -63,8 +63,11 @@
     var lat = marker.getLatLng().lat;
     var lon = marker.getLatLng().lng;
 
-    // Konstrukcja URL do API OSRM
-    var url = `http://router.project-osrm.org/isoline?loc=${lat},${lon}&range=600&transport_mode=${mode}`;
+    // Twój klucz API z GraphHopper
+    var apiKey = '7e539117-ecab-4f5c-b7ab-ed83f1fd4825'; 
+
+    // Konstrukcja URL do GraphHopper
+    var url = `https://graphhopper.com/api/1/isochrone?point=${lat},${lon}&time_limit=600&vehicle=${mode}&key=${apiKey}`;
 
     // Logowanie zapytania
     console.log("Zapytanie do API:", url);
@@ -83,8 +86,6 @@
             console.error('Błąd podczas generowania izochrony:', error);
         });
 }
-
-
 </script>
 
 </body>
