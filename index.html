@@ -1,6 +1,78 @@
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<body><div id="map" style="height: 600px;"></div></body> 
-<button onclick="generateIsochron(marker.getLatLng().lat, marker.getLatLng().lng, 'car')">Samochód</button>
-<button onclick="generateIsochron(marker.getLatLng().lat, marker.getLatLng().lng, 'foot')">Pieszo</button>
-<button onclick="generateIsochron(marker.getLatLng().lat, marker.getLatLng().lng, 'bike')">Rower</button>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isochron App</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            width: 100%;
+            height: 600px;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<button onclick="generateIsochron('car')">Samochód</button>
+<button onclick="generateIsochron('foot')">Pieszo</button>
+<button onclick="generateIsochron('bike')">Rower</button>
+
+<script>
+    // Inicjalizacja mapy
+    var map = L.map('map').setView([52.2297, 21.0122], 13); // Ustawienie na Warszawę
+
+    // Dodanie warstwy mapy (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var marker; // Zmienna przechowująca marker
+
+    // Funkcja dodająca marker w miejscu kliknięcia na mapie
+    map.on('click', function(e) {
+        if (marker) {
+            marker.setLatLng(e.latlng); // Przemieszczanie markera, jeśli już istnieje
+        } else {
+            marker = L.marker(e.latlng).addTo(map); // Dodawanie nowego markera
+        }
+        console.log('Wybrany punkt:', e.latlng);
+    });
+
+    // Funkcja generująca izochrony (poligony)
+    function generateIsochron(mode) {
+        if (!marker) {
+            alert("Wybierz punkt na mapie.");
+            return;
+        }
+        var lat = marker.getLatLng().lat;
+        var lon = marker.getLatLng().lng;
+
+        var url = `http://router.project-osrm.org/isoline?loc=${lat},${lon}&range=600&points=100&algorithm=MGRS&transport_mode=${mode}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data).addTo(map); // Dodanie izochrony na mapę
+            })
+            .catch(error => console.error('Błąd podczas generowania izochrony:', error));
+    }
+</script>
+
+</body>
+</html>
+
