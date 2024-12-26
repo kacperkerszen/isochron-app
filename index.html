@@ -55,29 +55,35 @@
 
     // Funkcja generująca izochrony (poligony)
     function generateIsochron(mode) {
-        if (!marker) {
-            alert("Wybierz punkt na mapie.");
-            return;
-        }
-
-        var lat = marker.getLatLng().lat;
-        var lon = marker.getLatLng().lng;
-
-        var url = `http://router.project-osrm.org/isoline?loc=${lat},${lon}&range=600&transport_mode=${mode}`;
-
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.type === 'FeatureCollection' && data.features) {
-                    L.geoJSON(data).addTo(map); // Dodanie izochrony na mapę
-                } else {
-                    console.error('Błąd: Otrzymano niepoprawne dane GeoJSON.');
-                }
-            })
-            .catch(error => {
-                console.error('Błąd podczas generowania izochrony:', error);
-            });
+    if (!marker) {
+        alert("Wybierz punkt na mapie.");
+        return;
     }
+
+    var lat = marker.getLatLng().lat;
+    var lon = marker.getLatLng().lng;
+
+    // Konstrukcja URL do API OSRM
+    var url = `http://router.project-osrm.org/isoline?loc=${lat},${lon}&range=600&transport_mode=${mode}`;
+
+    // Logowanie zapytania
+    console.log("Zapytanie do API:", url);
+
+    // Wysłanie zapytania do API
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.type === 'FeatureCollection' && data.features) {
+                L.geoJSON(data).addTo(map); // Dodanie izochrony na mapę
+            } else {
+                console.error('Błąd: Otrzymano niepoprawne dane GeoJSON.');
+            }
+        })
+        .catch(error => {
+            console.error('Błąd podczas generowania izochrony:', error);
+        });
+}
+
 
 </script>
 
