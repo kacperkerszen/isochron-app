@@ -22,11 +22,22 @@
             font-size: 16px;
             cursor: pointer;
         }
+
+        select {
+            margin-bottom: 20px;  /* Dodajemy trochę przestrzeni nad listą rozwijaną */
+        }
     </style>
 </head>
 <body>
 
 <div id="map"></div>
+
+<label for="timeSelect">Wybierz czas podróży:</label>
+<select id="timeSelect">
+    <option value="5">5 minut</option>
+    <option value="15">15 minut</option>
+    <option value="30">30 minut</option>
+</select>
 
 <button id="carBtn">Samochód</button>
 <button id="footBtn">Pieszo</button>
@@ -63,6 +74,9 @@ function generateIsochron(mode) {
     var lat = marker.getLatLng().lat;
     var lon = marker.getLatLng().lng;
 
+    // Pobieranie wybranego czasu podróży
+    var timeLimit = document.getElementById("timeSelect").value;
+    
     // Twój klucz API z GraphHopper
     var apiKey = '7e539117-ecab-4f5c-b7ab-ed83f1fd4825'; 
 
