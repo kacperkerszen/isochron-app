@@ -81,7 +81,7 @@ function generateIsochron(mode) {
     var apiKey = '7e539117-ecab-4f5c-b7ab-ed83f1fd4825'; 
 
     // Konstrukcja URL do GraphHopper
-    var url = `https://graphhopper.com/api/1/isochrone?point=${lat},${lon}&time_limit=600&vehicle=${mode}&key=${apiKey}`;
+    var url = `https://graphhopper.com/api/1/isochrone?point=${lat},${lon}&time_limit=${timeLimit * 60}&vehicle=${mode}&key=${apiKey}`;
 
     // Logowanie zapytania
     console.log("Zapytanie do API:", url);
