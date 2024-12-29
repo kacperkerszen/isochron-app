@@ -2,14 +2,14 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  height: 100%;  /* Ustalamy wysokość całej strony na 100% */
+  height: 100%;
 }
 
 #map {
   width: 100%;
-  height: calc(100vh - 80px);  /* Ustawiamy wysokość mapy na pełną wysokość okna przeglądarki minus wysokość przycisków */
-  margin-top: 20px;  /* Opcjonalnie, jeśli chcesz dodać trochę przestrzeni nad mapą */
-  z-index: 1;  /* Upewniamy się, że mapa ma wyższy z-index niż przyciski */
+  height: calc(100vh - 60px);  /* Ustawiamy wysokość mapy na 100vh minus miejsce na przyciski */
+  margin-top: 20px;
+  z-index: 1;  /* Upewniamy się, że mapa nie jest przykryta przez przyciski */
 }
 
 button {
@@ -17,5 +17,5 @@ button {
   margin: 10px;
   font-size: 16px;
   cursor: pointer;
-  z-index: 2;  /* Ustawienie z-index dla przycisków, aby nie były zasłonięte przez mapę */
+  z-index: 2;  /* Ustawienie z-index dla przycisków */
 }

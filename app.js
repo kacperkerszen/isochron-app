@@ -15,7 +15,7 @@ map.on('click', function(e) {
     } else {
         marker = L.marker(e.latlng).addTo(map); // Dodawanie nowego markera
     }
-    console.log('Wybrany punkt:', e.latlng);
+    console.log('Wybrany punkt:', e.latlng); // Logowanie współrzędnych
 });
 
 // Funkcja generująca izochrony (poligony)
