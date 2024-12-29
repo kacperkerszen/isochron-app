@@ -72,18 +72,16 @@
         // Logowanie zapytania
         console.log("Zapytanie do API:", url);
 
-        // Wysłanie zapytania do API
         fetch(url)
             .then(response => response.json())
             .then(data => {
                 console.log('Odpowiedź z API:', data);  // Logowanie odpowiedzi
 
-                // Sprawdzamy, czy odpowiedź zawiera dane w formacie, który możemy zamienić na GeoJSON
                 if (data && data.polygons && data.polygons.length > 0) {
-                    // Załóżmy, że pierwsze pole w tablicy `polygons` zawiera współrzędne
-                    var polygonCoordinates = data.polygons[0];  // Przykład z pierwszego poligonu
+                    var polygonCoordinates = data.polygons[0];
+                    console.log('Współrzędne poligonu:', polygonCoordinates);  // Logowanie współrzędnych
 
-                    // Konwersja danych na GeoJSON
+            // Konwersja danych na GeoJSON
                     var geoJson = {
                         type: "FeatureCollection",
                         features: [{
@@ -96,16 +94,16 @@
                         }]
                     };
 
-                    // Dodanie GeoJSON do mapy
-                    L.geoJSON(geoJson).addTo(map);
-                } else {
-                    console.error('Błąd: Otrzymano niepoprawne dane, brak pól z poligonami.');
-                }
-            })
-            .catch(error => {
-                console.error('Błąd podczas generowania izochrony:', error);
-            });
-    }
+            // Dodanie GeoJSON do mapy
+            L.geoJSON(geoJson).addTo(map);
+        } else {
+            console.error('Błąd: Brak danych w polu polygons.');
+        }
+    })
+    .catch(error => {
+        console.error('Błąd podczas generowania izochrony:', error);
+    });
+}
 
     // Dodanie event listenerów dla przycisków
     document.getElementById('carBtn').addEventListener('click', function() {
