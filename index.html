@@ -4,20 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isochron App</title>
-    <!-- Styl CSS dla mapy i przycisków -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100%;
         }
 
         #map {
             width: 100%;
-            height: calc(100vh - 80px);  /* Ustawiamy wysokość mapy na 100vh minus wysokość przycisków */
-            margin-top: 20px;
-            z-index: 1;  /* Upewniamy się, że mapa ma wyższy z-index niż przyciski */
+            height: 600px;
         }
 
         button {
@@ -25,22 +21,16 @@
             margin: 10px;
             font-size: 16px;
             cursor: pointer;
-            z-index: 2;  /* Ustawienie z-index dla przycisków */
         }
     </style>
 </head>
 <body>
 
-<!-- Kontener mapy -->
 <div id="map"></div>
 
-<!-- Przyciski do generowania izochrony -->
 <button id="carBtn">Samochód</button>
 <button id="footBtn">Pieszo</button>
 <button id="bikeBtn">Rower</button>
-
-<!-- Skrypt Leaflet.js -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
     // Inicjalizacja mapy
@@ -90,8 +80,8 @@
 
                 // Sprawdzamy, czy odpowiedź zawiera dane w formacie, który możemy zamienić na GeoJSON
                 if (data && data.polygons && data.polygons.length > 0) {
-                    var polygonCoordinates = data.polygons[0];
-                    console.log('Współrzędne poligonu:', polygonCoordinates);  // Logowanie współrzędnych
+                    // Załóżmy, że pierwsze pole w tablicy `polygons` zawiera współrzędne
+                    var polygonCoordinates = data.polygons[0];  // Przykład z pierwszego poligonu
 
                     // Konwersja danych na GeoJSON
                     var geoJson = {
@@ -107,15 +97,9 @@
                     };
 
                     // Dodanie GeoJSON do mapy
-                    L.geoJSON(geoJson, {
-                        style: {
-                            color: 'blue',  // Kolor poligonu
-                            weight: 2,      // Grubość linii
-                            opacity: 1      // Przezroczystość
-                        }
-                    }).addTo(map);
+                    L.geoJSON(geoJson).addTo(map);
                 } else {
-                    console.error('Błąd: Brak danych w polu polygons.');
+                    console.error('Błąd: Otrzymano niepoprawne dane, brak pól z poligonami.');
                 }
             })
             .catch(error => {
