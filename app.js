@@ -51,6 +51,15 @@ function generateIsochron(mode) {
                 var polygonCoordinates = data.polygons[0].geometry.coordinates;
                 console.log('Współrzędne poligonu:', polygonCoordinates);  // Logowanie współrzędnych
 
+                var polygonColor;
+                if (mode === 'car') {
+                    polygonColor = 'red'; // Czerwony dla samochodu
+                } else if (mode === 'bike') {
+                    polygonColor = 'green'; // Zielony dla roweru
+                } else if (mode === 'foot') {
+                    polygonColor = 'blue'; // Niebieski dla pieszo
+                }
+                
                 // Konwersja danych na GeoJSON
                 var geoJson = {
                     type: "FeatureCollection",
@@ -67,9 +76,9 @@ function generateIsochron(mode) {
                 // Dodanie GeoJSON do mapy
                 L.geoJSON(geoJson, {
                     style: {
-                        color: 'blue',  // Kolor poligonu
+                        color: polygonColor,  // Kolor poligonu
                         weight: 2,      // Grubość linii
-                        opacity: 1      // Przezroczystość
+                        opacity: 0.7      // Przezroczystość
                     }
                 }).addTo(map);
 
