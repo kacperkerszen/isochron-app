@@ -7,6 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 var marker; // Zmienna przechowująca marker
+var poligony = []; // Tablica do przechowywania poligonów
 
 // Funkcja dodająca marker w miejscu kliknięcia na mapie
 map.on('click', function(e) {
@@ -82,6 +83,9 @@ function generateIsochron(mode) {
                     }
                 }).addTo(map);
 
+                // Przechowywanie poligonu w tablicy
+                poligony.push(polygonLayer);
+
                 // Wymuszenie renderowania mapy
                 map.invalidateSize();
             } else {
@@ -91,6 +95,28 @@ function generateIsochron(mode) {
         .catch(error => {
             console.error('Błąd podczas generowania izochrony:', error);
         });
+}
+
+// Funkcja ukrywająca wszystkie poligony
+function hidePolygons() {
+    poligony.forEach(function(polygon) {
+        polygon.setStyle({ opacity: 0 }); // Ustawienie przezroczystości na 0 (ukrycie)
+    });
+}
+
+// Funkcja pokazująca wszystkie poligony
+function showPolygons() {
+    poligony.forEach(function(polygon) {
+        polygon.setStyle({ opacity: 0.7 }); // Przywrócenie przezroczystości
+    });
+}
+
+// Funkcja usuwająca wszystkie poligony
+function removePolygons() {
+    poligony.forEach(function(polygon) {
+        map.removeLayer(polygon); // Usunięcie poligonu z mapy
+    });
+    poligony = []; // Czyszczenie tablicy z poligonami
 }
 
 // Dodanie event listenerów dla przycisków
@@ -104,4 +130,17 @@ document.getElementById('footBtn').addEventListener('click', function() {
 
 document.getElementById('bikeBtn').addEventListener('click', function() {
     generateIsochron('bike'); // Rower
+});
+
+// Dodanie event listenerów dla przycisków do kontroli widoczności poligonów
+document.getElementById('hidePolygonsBtn').addEventListener('click', function() {
+    hidePolygons(); // Ukrywanie poligonów
+});
+
+document.getElementById('showPolygonsBtn').addEventListener('click', function() {
+    showPolygons(); // Pokazywanie poligonów
+});
+
+document.getElementById('removePolygonsBtn').addEventListener('click', function() {
+    removePolygons(); // Usuwanie poligonów
 });
