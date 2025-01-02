@@ -1,5 +1,5 @@
 // Inicjalizacja mapy
-var map = L.map('map').setView([52.2297, 21.0122], 13); // Ustawienie na Warszawę
+var map = L.map('map').setView([54.37324226722646, 18.615535036114153], 12); // Ustawienie na Warszawę
 
 // Dodanie warstwy mapy (OpenStreetMap)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -8,6 +8,15 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var marker; // Zmienna przechowująca marker
 var poligony = []; // Tablica do przechowywania poligonów
+
+// Dodanie kontrolki geokodera do mapy (wyszukiwanie adresów)
+var geocoder = L.Control.Geocoder.nominatim();
+L.Control.geocoder({
+    geocoder: geocoder,
+    position: 'topleft', // Pozycja kontrolki wyszukiwania
+    placeholder: 'Wyszukaj adres',
+    collapsed: false // Rozwinięta kontrolka
+}).addTo(map);
 
 // Funkcja dodająca marker w miejscu kliknięcia na mapie
 map.on('click', function(e) {
@@ -53,12 +62,16 @@ function generateIsochron(mode) {
                 console.log('Współrzędne poligonu:', polygonCoordinates);  // Logowanie współrzędnych
 
                 var polygonColor;
+                var fillColor;
                 if (mode === 'car') {
                     polygonColor = 'red'; // Czerwony dla samochodu
+                    fillColor = 'rgba(255, 0, 0, 0.3)'; // Wypełnienie czerwone
                 } else if (mode === 'bike') {
                     polygonColor = 'green'; // Zielony dla roweru
+                    fillColor = 'rgba(0, 255, 0, 0.3)'; // Wypełnienie zielone
                 } else if (mode === 'foot') {
                     polygonColor = 'blue'; // Niebieski dla pieszo
+                    fillColor = 'rgba(0, 0, 255, 0.3)'; // Wypełnienie niebieskie
                 }
                 
                 // Konwersja danych na GeoJSON
@@ -75,16 +88,18 @@ function generateIsochron(mode) {
                 };
 
                 // Dodanie GeoJSON do mapy
-                L.geoJSON(geoJson, {
+                var polygonLayer = L.geoJSON(geoJson, {
                     style: {
-                        color: polygonColor,  // Kolor poligonu
-                        weight: 2,      // Grubość linii
-                        opacity: 0.7      // Przezroczystość
+                        color: polygonColor,        // Kolor krawędzi poligonu
+                        weight: 2,                  // Grubość linii
+                        opacity: 0.7,               // Przezroczystość krawędzi
+                        fillColor: fillColor,       // Kolor wypełnienia
+                        fillOpacity: 0.3            // Przezroczystość wypełnienia
                     }
                 }).addTo(map);
 
                 // Przechowywanie poligonu w tablicy
-                poligony.push(polygonLayer);
+                poligony.push(polygonLayer); // Przechowuj warstwę, a nie zmienną polygonLayer
 
                 // Wymuszenie renderowania mapy
                 map.invalidateSize();
@@ -100,14 +115,20 @@ function generateIsochron(mode) {
 // Funkcja ukrywająca wszystkie poligony
 function hidePolygons() {
     poligony.forEach(function(polygon) {
-        polygon.setStyle({ opacity: 0 }); // Ustawienie przezroczystości na 0 (ukrycie)
+        polygon.setStyle({ 
+            opacity: 0,               // Ustawienie przezroczystości na 0 dla krawędzi
+            fillOpacity: 0            // Ustawienie przezroczystości na 0 dla wypełnienia
+        });
     });
 }
 
 // Funkcja pokazująca wszystkie poligony
 function showPolygons() {
     poligony.forEach(function(polygon) {
-        polygon.setStyle({ opacity: 0.7 }); // Przywrócenie przezroczystości
+        polygon.setStyle({ 
+            opacity: 0.7,             // Przywrócenie przezroczystości krawędzi
+            fillOpacity: 0.3          // Przywrócenie przezroczystości wypełnienia
+        });
     });
 }
 

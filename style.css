@@ -1,19 +1,101 @@
+/* Resetowanie marginesów i paddingów */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    padding: 20px;
 }
 
 #map {
     width: 100%;
-    height: 600px;
+    height: 60vh;  /* Dostosowanie wysokości mapy */
+    margin-bottom: 20px;
+    border-radius: 10px; /* Zaokrąglenie rogów mapy */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Dodanie subtelnego cienia */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button, select {
+    font-size: 16px;
+    padding: 12px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px; /* Zaokrąglone rogi */
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 button {
-    padding: 10px;
-    margin: 10px;
-    font-size: 16px;
-    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+}
+
+button:hover {
+    background-color: #0056b3; /* Efekt najechania */
 }
 
 select {
-    margin-bottom: 20px;  /* Dodajemy trochę przestrzeni nad listą rozwijaną */
+    background-color: #fff;
+    color: #007BFF;
+    border: 2px solid #007BFF;
+    border-radius: 8px;
+    padding: 10px;
+    width: 150px;
+}
+
+select:hover {
+    border-color: #0056b3; /* Efekt najechania na select */
+}
+
+/* Stylowanie przycisków do kontrolowania poligonów */
+#control-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Stylowanie przycisków do kontrolowania poligonów */
+button.control {
+    background-color: #28a745;
+    color: white;
+}
+
+button.control:hover {
+    background-color: #218838;
+}
+
+/* Stylizacja na urządzenia mobilne */
+@media (max-width: 768px) {
+    #map {
+        height: 50vh;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    select {
+        width: 120px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    #control-buttons {
+        flex-direction: column;
+    }
 }
