@@ -13,7 +13,7 @@ var poligony = []; // Tablica do przechowywania poligonów
 var geocoder = L.Control.Geocoder.nominatim();
 L.Control.geocoder({
     geocoder: geocoder,
-    position: 'topleft', // Pozycja kontrolki wyszukiwania
+    position: 'topright', // Pozycja kontrolki wyszukiwania
     placeholder: 'Wyszukaj adres',
     collapsed: false // Rozwinięta kontrolka
 }).addTo(map);

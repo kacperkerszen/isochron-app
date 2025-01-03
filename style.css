@@ -14,37 +14,26 @@ body {
 
 #map {
     width: 100%;
-    height: 60vh;  /* Dostosowanie wysokości mapy */
+    height: 60vh;  /* Zmniejszenie wysokości mapy */
     margin-bottom: 20px;
     border-radius: 10px; /* Zaokrąglenie rogów mapy */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Dodanie subtelnego cienia */
 }
 
+/* Kontener dla całej strony */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-button, select {
+label {
     font-size: 16px;
-    padding: 12px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px; /* Zaokrąglone rogi */
-    cursor: pointer;
-    transition: all 0.3s ease;
+    color: #007BFF;
+    margin-bottom: 10px;
 }
 
-button {
-    background-color: #007BFF;
-    color: white;
-}
-
-button:hover {
-    background-color: #0056b3; /* Efekt najechania */
-}
-
+/* Stylizacja select */
 select {
     background-color: #fff;
     color: #007BFF;
@@ -52,21 +41,35 @@ select {
     border-radius: 8px;
     padding: 10px;
     width: 150px;
+    font-size: 16px;
 }
 
 select:hover {
-    border-color: #0056b3; /* Efekt najechania na select */
+    border-color: #0056b3;
 }
 
-/* Stylowanie przycisków do kontrolowania poligonów */
-#control-buttons {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-top: 20px;
+/* Stylowanie przycisków */
+button, select {
+    font-size: 16px;
+    padding: 12px 20px;
+    margin: 8px;
+    border: none;
+    border-radius: 8px; /* Zaokrąglone rogi */
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* Stylowanie przycisków do kontrolowania poligonów */
+/* Przyciski transportu */
+button.transport {
+    background-color: #007BFF;
+    color: white;
+}
+
+button.transport:hover {
+    background-color: #0056b3;
+}
+
+/* Przyciski do działań z poligonami */
 button.control {
     background-color: #28a745;
     color: white;
@@ -74,6 +77,38 @@ button.control {
 
 button.control:hover {
     background-color: #218838;
+}
+
+/* Oddzielenie grup przycisków */
+#transport-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#control-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Zmniejszenie dolnego panelu */
+button, select {
+    font-size: 16px;
+    padding: 10px 15px;
+    margin: 6px;
+}
+
+/* Przyciski w grupie transportu (przyciski transportu) */
+#transport-buttons button {
+    width: 30%; /* Mniejsze przyciski */
+}
+
+/* Grupa przycisków z poligonami (kontrolki) */
+#control-buttons button {
+    width: 30%; /* Mniejsze przyciski */
 }
 
 /* Stylizacja na urządzenia mobilne */
@@ -95,7 +130,7 @@ button.control:hover {
         font-size: 14px;
     }
 
-    #control-buttons {
+    #control-buttons, #transport-buttons {
         flex-direction: column;
     }
 }
